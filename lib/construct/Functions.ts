@@ -11,7 +11,6 @@ const DEFAULT_MEMORY = 1024;
 export class Functions {
 
     public readonly lambdaRole: Role;
-    public readonly connectorLambda: NodejsFunction;
     public readonly queryDbLambda: NodejsFunction;
 
     constructor(private stack: Stack,
@@ -28,36 +27,10 @@ export class Functions {
             ]
         });
 
-        this.connectorLambda = new NodejsFunction(stack, 'AvConnectorLambda', {
-                bundling: {
-                    preCompilation: true,
-                    forceDockerBundling: true,
-                },
-                entry: path.join(__dirname, '../../service/ava-api/handler.ts'),
-                handler: 'retrieveData',
-                runtime: Runtime.NODEJS_14_X,
-                architecture: Architecture.ARM_64,
-                timeout: Duration.seconds(900),
-                memorySize: DEFAULT_MEMORY,
-                initialPolicy: [
-                    new PolicyStatement({
-                        effect: Effect.ALLOW,
-                        actions: [
-                            's3:GetObject'
-                        ],
-                        resources: ['*']
-                    })
-                ],
-                environment: {
-                    TEST_ENV_VARIABLE: 'test'
-                }
-            }
-        );
-
         this.queryDbLambda = new NodejsFunction(stack, 'QueryDbLambda', {
                 bundling: {
                     preCompilation: true,
-                    forceDockerBundling: true,
+                    //forceDockerBundling: true,
                 },
                 entry: path.join(__dirname, '../../service/load-from-db/handler.ts'),
                 handler: 'loadFromDb',
