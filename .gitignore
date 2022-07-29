@@ -9,3 +9,4 @@ cdk.out
 cdk.context.json
 /.idea
 /local-dev/dist
+/.idea/workspace.xml
