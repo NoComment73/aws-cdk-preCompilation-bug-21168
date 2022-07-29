@@ -1,0 +1,34 @@
+{
+  "version": "20.0.0",
+  "files": {
+    "37ef90d8e9d82a79a91f733cc0b634d515c54e76a2db48f26dbb83453bce463f": {
+      "source": {
+        "path": "asset.37ef90d8e9d82a79a91f733cc0b634d515c54e76a2db48f26dbb83453bce463f",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "734830471883-eu-central-1": {
+          "bucketName": "cdk-hnb659fds-assets-734830471883-eu-central-1",
+          "objectKey": "37ef90d8e9d82a79a91f733cc0b634d515c54e76a2db48f26dbb83453bce463f.zip",
+          "region": "eu-central-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::734830471883:role/cdk-hnb659fds-file-publishing-role-734830471883-eu-central-1"
+        }
+      }
+    },
+    "d80dbca2687c9def061c0f2e432ca665a9234326343984b1ddc6d113c221c785": {
+      "source": {
+        "path": "FSServiceStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "734830471883-eu-central-1": {
+          "bucketName": "cdk-hnb659fds-assets-734830471883-eu-central-1",
+          "objectKey": "d80dbca2687c9def061c0f2e432ca665a9234326343984b1ddc6d113c221c785.json",
+          "region": "eu-central-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::734830471883:role/cdk-hnb659fds-file-publishing-role-734830471883-eu-central-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

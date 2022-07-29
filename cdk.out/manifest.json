@@ -1,0 +1,103 @@
+{
+  "version": "20.0.0",
+  "artifacts": {
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    },
+    "FSServiceStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "FSServiceStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "FSServiceStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://734830471883/eu-central-1",
+      "properties": {
+        "templateFile": "FSServiceStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::734830471883:role/cdk-hnb659fds-deploy-role-734830471883-eu-central-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::734830471883:role/cdk-hnb659fds-cfn-exec-role-734830471883-eu-central-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-734830471883-eu-central-1/d80dbca2687c9def061c0f2e432ca665a9234326343984b1ddc6d113c221c785.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "FSServiceStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::734830471883:role/cdk-hnb659fds-lookup-role-734830471883-eu-central-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "FSServiceStackGW"
+      },
+      "dependencies": [
+        "FSServiceStack.assets"
+      ],
+      "metadata": {
+        "/FSServiceStack/MainDataTable": [
+          {
+            "type": "aws:cdk:hasPhysicalName",
+            "data": {
+              "Ref": "MainDataTable4A82CEB7"
+            }
+          }
+        ],
+        "/FSServiceStack/MainDataTable/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MainDataTable4A82CEB7"
+          }
+        ],
+        "/FSServiceStack/LambdaRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaRole3A44B857"
+          }
+        ],
+        "/FSServiceStack/QueryDbLambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryDbLambdaServiceRole22AA5FF6"
+          }
+        ],
+        "/FSServiceStack/QueryDbLambda/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryDbLambdaServiceRoleDefaultPolicyE0CC0A0D"
+          }
+        ],
+        "/FSServiceStack/QueryDbLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "QueryDbLambdaEE313153"
+          }
+        ],
+        "/FSServiceStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/FSServiceStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/FSServiceStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "FSServiceStack"
+    }
+  }
+}

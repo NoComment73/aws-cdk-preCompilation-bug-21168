@@ -1,0 +1,370 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.1.60"
+        }
+      },
+      "FSServiceStack": {
+        "id": "FSServiceStack",
+        "path": "FSServiceStack",
+        "children": {
+          "MainDataTable": {
+            "id": "MainDataTable",
+            "path": "FSServiceStack/MainDataTable",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "FSServiceStack/MainDataTable/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::DynamoDB::Table",
+                  "aws:cdk:cloudformation:props": {
+                    "keySchema": [
+                      {
+                        "attributeName": "PK",
+                        "keyType": "HASH"
+                      },
+                      {
+                        "attributeName": "SK",
+                        "keyType": "RANGE"
+                      }
+                    ],
+                    "attributeDefinitions": [
+                      {
+                        "attributeName": "PK",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "SK",
+                        "attributeType": "S"
+                      },
+                      {
+                        "attributeName": "REF2",
+                        "attributeType": "S"
+                      }
+                    ],
+                    "billingMode": "PAY_PER_REQUEST",
+                    "globalSecondaryIndexes": [
+                      {
+                        "indexName": "SK_PK",
+                        "keySchema": [
+                          {
+                            "attributeName": "SK",
+                            "keyType": "HASH"
+                          },
+                          {
+                            "attributeName": "PK",
+                            "keyType": "RANGE"
+                          }
+                        ],
+                        "projection": {
+                          "projectionType": "ALL"
+                        }
+                      },
+                      {
+                        "indexName": "REF2_PK",
+                        "keySchema": [
+                          {
+                            "attributeName": "REF2",
+                            "keyType": "HASH"
+                          },
+                          {
+                            "attributeName": "PK",
+                            "keyType": "RANGE"
+                          }
+                        ],
+                        "projection": {
+                          "projectionType": "ALL"
+                        }
+                      }
+                    ],
+                    "tableName": "fcs-ava-connector-MainData"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_dynamodb.CfnTable",
+                  "version": "2.34.0"
+                }
+              },
+              "ScalingRole": {
+                "id": "ScalingRole",
+                "path": "FSServiceStack/MainDataTable/ScalingRole",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.Resource",
+                  "version": "2.34.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_dynamodb.Table",
+              "version": "2.34.0"
+            }
+          },
+          "AWSLambdaBasicExecutionRole": {
+            "id": "AWSLambdaBasicExecutionRole",
+            "path": "FSServiceStack/AWSLambdaBasicExecutionRole",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.34.0"
+            }
+          },
+          "AWSLambdaVPCAccessExecutionRole": {
+            "id": "AWSLambdaVPCAccessExecutionRole",
+            "path": "FSServiceStack/AWSLambdaVPCAccessExecutionRole",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.Resource",
+              "version": "2.34.0"
+            }
+          },
+          "LambdaRole": {
+            "id": "LambdaRole",
+            "path": "FSServiceStack/LambdaRole",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "FSServiceStack/LambdaRole/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                  "aws:cdk:cloudformation:props": {
+                    "assumeRolePolicyDocument": {
+                      "Statement": [
+                        {
+                          "Action": "sts:AssumeRole",
+                          "Effect": "Allow",
+                          "Principal": {
+                            "Service": "lambda.amazonaws.com"
+                          }
+                        }
+                      ],
+                      "Version": "2012-10-17"
+                    },
+                    "managedPolicyArns": [
+                      "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+                      "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                    ],
+                    "path": "/",
+                    "roleName": "fcs-ava-connector-gw-lambda-default"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                  "version": "2.34.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_iam.Role",
+              "version": "2.34.0"
+            }
+          },
+          "QueryDbLambda": {
+            "id": "QueryDbLambda",
+            "path": "FSServiceStack/QueryDbLambda",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "FSServiceStack/QueryDbLambda/ServiceRole",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "FSServiceStack/QueryDbLambda/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.34.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "FSServiceStack/QueryDbLambda/ServiceRole/DefaultPolicy",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "FSServiceStack/QueryDbLambda/ServiceRole/DefaultPolicy/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                          "aws:cdk:cloudformation:props": {
+                            "policyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "dynamodb:Query",
+                                  "Effect": "Allow",
+                                  "Resource": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "MainDataTable4A82CEB7",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/index/*"
+                                      ]
+                                    ]
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "QueryDbLambdaServiceRoleDefaultPolicyE0CC0A0D",
+                            "roles": [
+                              {
+                                "Ref": "QueryDbLambdaServiceRole22AA5FF6"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.34.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.34.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.34.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "FSServiceStack/QueryDbLambda/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "FSServiceStack/QueryDbLambda/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.34.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "FSServiceStack/QueryDbLambda/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.34.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.34.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "FSServiceStack/QueryDbLambda/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": "cdk-hnb659fds-assets-734830471883-eu-central-1",
+                      "s3Key": "37ef90d8e9d82a79a91f733cc0b634d515c54e76a2db48f26dbb83453bce463f.zip"
+                    },
+                    "role": {
+                      "Fn::GetAtt": [
+                        "QueryDbLambdaServiceRole22AA5FF6",
+                        "Arn"
+                      ]
+                    },
+                    "architectures": [
+                      "arm64"
+                    ],
+                    "environment": {
+                      "variables": {
+                        "TEST_ENV_VARIABLE": "test",
+                        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                      }
+                    },
+                    "handler": "index.loadFromDb",
+                    "memorySize": 1024,
+                    "runtime": "nodejs14.x",
+                    "timeout": 900
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.34.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda_nodejs.NodejsFunction",
+              "version": "2.34.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "FSServiceStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "FSServiceStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.34.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.60"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.34.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.34.0"
+    }
+  }
+}

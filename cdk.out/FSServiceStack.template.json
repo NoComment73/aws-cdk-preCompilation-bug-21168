@@ -1,0 +1,252 @@
+{
+ "Resources": {
+  "MainDataTable4A82CEB7": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "KeySchema": [
+     {
+      "AttributeName": "PK",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "SK",
+      "KeyType": "RANGE"
+     }
+    ],
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "PK",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "SK",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "REF2",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "GlobalSecondaryIndexes": [
+     {
+      "IndexName": "SK_PK",
+      "KeySchema": [
+       {
+        "AttributeName": "SK",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "PK",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     },
+     {
+      "IndexName": "REF2_PK",
+      "KeySchema": [
+       {
+        "AttributeName": "REF2",
+        "KeyType": "HASH"
+       },
+       {
+        "AttributeName": "PK",
+        "KeyType": "RANGE"
+       }
+      ],
+      "Projection": {
+       "ProjectionType": "ALL"
+      }
+     }
+    ],
+    "TableName": "fcs-ava-connector-MainData"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "FSServiceStack/MainDataTable/Resource"
+   }
+  },
+  "LambdaRole3A44B857": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+     "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+    ],
+    "Path": "/",
+    "RoleName": "fcs-ava-connector-gw-lambda-default"
+   },
+   "Metadata": {
+    "aws:cdk:path": "FSServiceStack/LambdaRole/Resource"
+   }
+  },
+  "QueryDbLambdaServiceRole22AA5FF6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FSServiceStack/QueryDbLambda/ServiceRole/Resource"
+   }
+  },
+  "QueryDbLambdaServiceRoleDefaultPolicyE0CC0A0D": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "dynamodb:Query",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "MainDataTable4A82CEB7",
+            "Arn"
+           ]
+          },
+          "/index/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "QueryDbLambdaServiceRoleDefaultPolicyE0CC0A0D",
+    "Roles": [
+     {
+      "Ref": "QueryDbLambdaServiceRole22AA5FF6"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "FSServiceStack/QueryDbLambda/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "QueryDbLambdaEE313153": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-734830471883-eu-central-1",
+     "S3Key": "37ef90d8e9d82a79a91f733cc0b634d515c54e76a2db48f26dbb83453bce463f.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "QueryDbLambdaServiceRole22AA5FF6",
+      "Arn"
+     ]
+    },
+    "Architectures": [
+     "arm64"
+    ],
+    "Environment": {
+     "Variables": {
+      "TEST_ENV_VARIABLE": "test",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.loadFromDb",
+    "MemorySize": 1024,
+    "Runtime": "nodejs14.x",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "QueryDbLambdaServiceRoleDefaultPolicyE0CC0A0D",
+    "QueryDbLambdaServiceRole22AA5FF6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "FSServiceStack/QueryDbLambda/Resource",
+    "aws:asset:path": "asset.37ef90d8e9d82a79a91f733cc0b634d515c54e76a2db48f26dbb83453bce463f",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/zVPyw6CMBD8Fu9lfaCJVzHxaAx6J0tbSYG2CdtqCOm/Wwqe5rGZnd0D5EfYbfBLGRdd1qsapqdD3rFoVZMYDWorovnCupfs+jaJBKZQw1TaxUv4sL3i4ywXFliPuhZYGStkS3BPcPOGO2UNo7xCIukILjNEDYXnnXQFklyjEJf9A4GVkqwfuGQpEK9slGlS/ToIbK6Clraf/RlO8a+WlMoGb5zSEsoFf9+LeRrzAAAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "FSServiceStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

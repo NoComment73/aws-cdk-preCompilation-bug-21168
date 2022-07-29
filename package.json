@@ -1,0 +1,7 @@
+{
+  "name": "aws-cdk-preCompilation-bug-21168",
+  "version": "1.0.0",
+  "dependencies": {
+    
+  }
+}

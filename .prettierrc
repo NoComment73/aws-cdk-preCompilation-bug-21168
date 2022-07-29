@@ -1,0 +1,11 @@
+{
+    "singleQuote": true,
+    "editor.formatOnSave": true,
+    "proseWrap": "never",
+    "tabWidth": 4,
+    "requireConfig": false,
+    "useTabs": false,
+    "trailingComma": false,
+    "bracketSpacing": true,
+    "semi": true
+}
